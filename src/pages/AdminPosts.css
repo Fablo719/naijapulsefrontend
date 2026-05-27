@@ -1,0 +1,160 @@
+/* ====================================================
+   ADMIN POSTS — AdminPosts.css
+   ==================================================== */
+.admin-posts-container {
+  min-height: 100vh;
+  background: var(--white);
+  padding: 48px 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+  animation: fadeIn 0.5s var(--ease-snap);
+}
+ 
+.admin-posts-container .admin-header {
+  border-bottom: 2px solid var(--black);
+  margin-bottom: 40px;
+  padding-bottom: 24px;
+  animation: fadeUp 0.5s var(--ease-snap);
+}
+ 
+.admin-posts-container .admin-header h2 {
+  font-family: var(--font-display);
+  font-size: 42px;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+}
+ 
+.admin-posts-container .admin-header p {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--mid);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-top: 6px;
+}
+ 
+.admin-filters {
+  margin-bottom: 28px;
+  animation: fadeUp 0.5s var(--ease-snap) 0.1s both;
+}
+ 
+.admin-filters .form-control,
+.admin-filters .form-select {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  background: var(--white);
+  color: var(--black);
+  outline: none;
+  transition: border-color 0.2s ease;
+  appearance: none;
+}
+ 
+.admin-filters .form-control:focus,
+.admin-filters .form-select:focus {
+  border-color: var(--black);
+}
+ 
+.admin-filters .form-control::placeholder {
+  color: var(--mid);
+}
+ 
+.admin-table-container {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  animation: fadeUp 0.5s var(--ease-snap) 0.2s both;
+}
+ 
+.table-responsive { overflow-x: auto; }
+ 
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+ 
+.table thead.table-dark {
+  background: var(--black);
+  color: var(--white);
+}
+ 
+.table thead th {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 14px 20px;
+  text-align: left;
+}
+ 
+.table.table-hover tbody tr {
+  border-bottom: 1px solid var(--border);
+  transition: background 0.15s ease;
+  animation: slideInLeft 0.4s var(--ease-snap) both;
+}
+ 
+.table.table-hover tbody tr:nth-child(1)  { animation-delay: 0.05s; }
+.table.table-hover tbody tr:nth-child(2)  { animation-delay: 0.10s; }
+.table.table-hover tbody tr:nth-child(3)  { animation-delay: 0.15s; }
+.table.table-hover tbody tr:nth-child(4)  { animation-delay: 0.20s; }
+.table.table-hover tbody tr:nth-child(n+5){ animation-delay: 0.25s; }
+ 
+.table.table-hover tbody tr:hover { background: #f0f0ec; }
+ 
+.table.table-hover tbody tr:last-child { border-bottom: none; }
+ 
+.table.align-middle td {
+  padding: 16px 20px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--black);
+  vertical-align: middle;
+}
+ 
+.post-title {
+  font-weight: 500;
+  color: var(--black);
+  margin-bottom: 4px;
+}
+ 
+.post-excerpt {
+  font-size: 11px;
+  color: var(--mid);
+  line-height: 1.5;
+  max-width: 360px;
+}
+ 
+.category-badge {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: 1px solid var(--border);
+  padding: 4px 10px;
+  display: inline-block;
+  border-radius: 2px;
+  color: var(--mid);
+}
+ 
+.btn.btn-danger.btn-sm {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: var(--black);
+  border: 1px solid var(--black);
+  color: var(--white);
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s ease;
+}
+ 
+.btn.btn-danger.btn-sm:hover {
+  background: #333;
+  transform: scale(1.03);
+}
+ 
