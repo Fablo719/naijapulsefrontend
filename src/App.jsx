@@ -1,7 +1,7 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-import Navbar from "./components/Navbar";
-import Layout from "./components/Layout";
+import Navbar from "./components/navbar";
+import Layout from "./components/layout";
 import AdminRoute from './pages/AdminRoute';
 //import Ourstories from "./pages/OurStories";
 import LandingPage from "./pages/LandingPage";
