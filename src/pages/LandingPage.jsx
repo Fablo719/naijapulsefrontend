@@ -25,7 +25,7 @@ function LandingPage() {
                 <Link className="nav-link" to="/">Home</Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="/create">Write</Link>
+                <Link className="nav-link" to="/login">Write</Link>
               </li>
               <li className="nav-item">
                 <Link className="nav-link" to="/login">Login</Link>
@@ -44,7 +44,7 @@ function LandingPage() {
           <p className="lead mt-3">
             Create, read and explore amazing blog posts from different writers.
           </p>
-          <Link to="/create" className="btn btn-light btn-lg mt-3">
+          <Link to="/login" className="btn btn-light btn-lg mt-3">
             Start composing
           </Link>
         </div>
@@ -56,7 +56,7 @@ function LandingPage() {
           <h2 className="text-center mb-5"> Posts</h2>
 
           <div className="row justify-content-center">
-  {[1].map((post) => (
+  {[0].map((post) => (
     <div key={post} className="col-lg-7 col-md-9">
                 <div className="card h-100 shadow-sm">
                   <div className="card-body">
