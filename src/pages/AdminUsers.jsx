@@ -220,13 +220,13 @@ const AdminUsers = () => {
             <p>Regular Users</p>
           </div>
         </div>
-        <div className="stat-card">
-          <div className="stat-icon">✅</div>
+        {/* <div className="stat-card">
+          { <div className="stat-icon">✅</div> }
           <div className="stat-info">
             <h3>{stats.active}</h3>
-            <p>Active Users</p>
+            { <p>Active Users</p> }
           </div>
-        </div>
+        </div> */}
       </div>
 
       {/* Search Bar */}
@@ -284,24 +284,29 @@ const AdminUsers = () => {
                   <td>{formatDate(user.createdAt)}</td>
                   <td className="actions-cell">
                     <button 
-                      className="action-btn role-btn"
-                      onClick={() => openRoleModal(user)}
-                      title="Change Role"
-                      disabled={user._id === currentUser?._id}
-                    >
-                      👑
-                    </button>
-                    <button 
-                      className="action-btn delete-btn"
-                      onClick={() => {
-                        setSelectedUser(user);
-                        setShowDeleteModal(true);
-                      }}
-                      title="Delete User"
-                      disabled={user._id === currentUser?._id}
-                    >
-                      🗑️
-                    </button>
+  className="action-btn role-btn"
+  onClick={() => openRoleModal(user)}
+  title="Change Role"
+  disabled={
+    user._id === currentUser?._id ||
+    user.role === "admin"
+  }
+>
+  👑
+</button>
+{user.role !== "admin" && (
+  <button 
+    className="action-btn delete-btn"
+    onClick={() => {
+      setSelectedUser(user);
+      setShowDeleteModal(true);
+    }}
+    title="Delete User"
+    disabled={user._id === currentUser?._id}
+  >
+    🗑️
+  </button>
+)}
                   </td>
                 </tr>
               ))}

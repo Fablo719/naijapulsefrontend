@@ -14,7 +14,6 @@ const Home = () => {
     const [isSearching, setIsSearching] = useState(false);
     const [currentUser, setCurrentUser] = useState(null);
     const [selectedCategory, setSelectedCategory] = useState('all');
-
     const API_URL = "https://naijapulse.vercel.app/api/v1";
 
     const categories = [

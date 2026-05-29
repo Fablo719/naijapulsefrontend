@@ -104,12 +104,12 @@ const AdminPosts = () => {
             style={{ maxWidth: "200px" }}
           >
             <option>All Categories</option>
-            <option>business</option>
-            <option>creativity</option>
             <option>technology</option>
-            <option>lifestyle</option>
-            <option>innovation</option>
-            <option>wisdom</option>
+            <option>politics</option>
+            <option>sport</option>
+            <option>security</option>
+            <option>education</option>
+            <option>health</option>
           </select>
         </div>
       </div>

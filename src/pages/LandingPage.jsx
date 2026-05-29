@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import "./LandingPage.css";
 
 function LandingPage() {
   return (
@@ -7,7 +8,7 @@ function LandingPage() {
       {/* Navbar */}
       <nav className="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
         <div className="container">
-          <a className="navbar-brand fw-bold text-primary">MyBlog</a>
+          <a className="navbar-brand fw-bold text-primary">NaijaPulse</a>
 
           <button
             className="navbar-toggler"
@@ -54,14 +55,25 @@ function LandingPage() {
         <div className="container">
           <h2 className="text-center mb-5"> Posts</h2>
 
-          <div className="row">
-            {[1, 2, 3].map((post) => (
-              <div key={post} className="col-md-4 mb-4">
+          <div className="row justify-content-center">
+  {[1].map((post) => (
+    <div key={post} className="col-lg-7 col-md-9">
                 <div className="card h-100 shadow-sm">
                   <div className="card-body">
-                    <h5 className="card-title">Sample Blog {post}</h5>
+                    <h5 className="card-title">tinubu talks on bandits... {post}</h5>
                     <p className="card-text">
-                      This is a short preview of your blog post content.
+                      Stories That Matter
+                      Tinubu Vows Stronger Action Against Banditry**
+
+President Bola Tinubu has reaffirmed his administration's commitment to tackling banditry and improving security across Nigeria. Speaking during a recent meeting with security officials, the President emphasized the need for stronger collaboration among security agencies to protect lives and property.
+
+Tinubu stated that banditry remains a major challenge in several parts of the country and assured Nigerians that efforts are ongoing to dismantle criminal networks responsible for attacks and kidnappings.
+
+He also called on citizens to support security agencies by providing useful information that can help prevent crimes. The government, according to the President, remains focused on restoring peace and creating a safer environment for all Nigerians.
+
+Security experts believe that sustained operations and community cooperation will play a key role in achieving long-term stability.
+
+
                     </p>
                     <Link to={`/post/${post}`} className="btn btn-primary btn-sm">
                       Read More
