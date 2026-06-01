@@ -3,6 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import Navbar from "./components/navbar";
 import Layout from "./components/layout";
 import AdminRoute from './pages/AdminRoute';
+import SinglePost from "./pages/SinglePosts";
 //import Ourstories from "./pages/OurStories";
 import LandingPage from "./pages/LandingPage";
 import AdminPosts from "./pages/AdminPosts";
@@ -31,6 +32,7 @@ const App = () => {
       <Routes>
         {/* Public Routes - No authentication required */}
         <Route path="/" element={<LandingPage />} />
+        <Route path="/post/:id" element={<SinglePost />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/reset-password" element={<ResetPassword />} /> {/* ✅ Use this route */}

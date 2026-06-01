@@ -58,7 +58,7 @@ const AdminPosts = () => {
 
   const totalPosts = posts.length;
 
-  // Full Screen White Overlay with Dark Spinner
+  
   if (loading) {
     return (
       <div className="loading-overlay">

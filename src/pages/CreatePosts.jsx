@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./CreatePosts.css";
-// 🔥 IMAGE COMPRESS FUNCTION (unchanged)
+// 🔥 IMAGE COMPRESS FUNCTION 
 const compressImage = (file) => {
   return new Promise((resolve, reject) => {
     const img = new Image();
@@ -106,7 +106,7 @@ const CreatePost = () => {
 
     setIsLoading(true);
 
-    // ✅ FIX 1: Better token extraction with error checking
+
     const token = localStorage.getItem("token");
     
     if (!token) {
@@ -116,7 +116,7 @@ const CreatePost = () => {
       return;
     }
 
-    // ✅ FIX 2: Safely parse user data
+
     let user = null;
     try {
       const userStr = localStorage.getItem("user");
@@ -134,7 +134,7 @@ const CreatePost = () => {
       return;
     }
 
-    // ✅ FIX 3: Get author ID from multiple possible fields
+    
     const authorId = user.id || user._id || user.userId;
     const authorName = user.name || user.fullName || 
                       (user.firstName && user.lastName ? `${user.firstName} ${user.lastName}` : null) ||
@@ -160,7 +160,7 @@ const CreatePost = () => {
     console.log("Using token:", token.substring(0, 20) + "...");
 
     try {
-      // ✅ FIX 4: Ensure token is properly formatted
+      
       const response = await axios.post(
         `${API_URL}/posts/createPost`,
         payload,
@@ -183,7 +183,7 @@ const CreatePost = () => {
     } catch (err) {
       console.error("Full error:", err);
       
-      // ✅ FIX 5: Better error handling
+      
       if (err.response?.status === 401) {
         toast.error("Session expired. Please login again.");
         localStorage.removeItem("token");

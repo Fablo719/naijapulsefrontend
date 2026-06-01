@@ -71,7 +71,7 @@ const Login = () => {
         setShowForgotPassword(false);
         setResetEmail("");
         
-        // Show token in console for testing (development only)
+        
         if (response.data.resetToken) {
           console.log("🔑 Reset Token:", response.data.resetToken);
           toast.info(`Test Token: ${response.data.resetToken.substring(0, 25)}...`, {

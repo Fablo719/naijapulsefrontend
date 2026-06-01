@@ -10,6 +10,7 @@ const Home = () => {
     const [loading, setLoading] = useState(true);
     const [showOffcanvas, setShowOffcanvas] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
+    const [searchInput, setSearchInput] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const [isSearching, setIsSearching] = useState(false);
     const [currentUser, setCurrentUser] = useState(null);
@@ -44,18 +45,10 @@ const Home = () => {
     const fetchPosts = async () => {
         try {
             const token = localStorage.getItem("token");
-            if (!token) {
-                setLoading(false);
-                return;
-            }
-
-            const response = await axios.get(
-                `${API_URL}/posts/getAllPosts`,
-                {
-                    headers: { "Authorization": `Bearer ${token}` }
-                }
-            );
-            
+            if (!token) { setLoading(false); return; }
+            const response = await axios.get(`${API_URL}/posts/getAllPosts`, {
+                headers: { "Authorization": `Bearer ${token}` }
+            });
             const postsData = response.data.posts || [];
             setPosts(postsData);
             setFilteredPosts(postsData);
@@ -73,18 +66,48 @@ const Home = () => {
 
     const handleSearch = async (e) => {
         e.preventDefault();
-        if (!searchQuery.trim()) return;
+        const q = searchInput.trim();
+        if (!q) return;
         setIsSearching(true);
+        setSearchQuery(q);
         try {
-            const response = await axios.get(
-                `${API_URL}/posts/search?q=${searchQuery}`,
-                {
-                    headers: { "Authorization": `Bearer ${localStorage.getItem("token")}` }
-                }
-            );
-            setSearchResults(response.data.posts || []);
+            const response = await axios.get(`${API_URL}/posts/search?q=${encodeURIComponent(q)}`, {
+                headers: { "Authorization": `Bearer ${localStorage.getItem("token")}` }
+            });
+            console.log("Search API response:", response.data);
+            const results =
+                response.data.posts ||
+                response.data.data ||
+                response.data.results ||
+                (Array.isArray(response.data) ? response.data : []);
+            console.log("Parsed results count:", results.length);
+
+            if (results.length > 0) {
+                setSearchResults(results);
+            } else {
+                // Fallback: filter already-loaded posts client-side
+                const lower = q.toLowerCase();
+                const clientResults = posts.filter(p =>
+                    p.postTitle?.toLowerCase().includes(lower) ||
+                    p.postContent?.toLowerCase().includes(lower) ||
+                    p.authorName?.toLowerCase().includes(lower) ||
+                    p.postCategory?.toLowerCase().includes(lower)
+                );
+                console.log("Client-side fallback results:", clientResults.length);
+                setSearchResults(clientResults);
+            }
         } catch (error) {
-            console.error("Error searching posts:", error);
+            console.error("Search API failed, falling back to client-side:", error.response?.data || error.message);
+            // Fallback: filter already-loaded posts client-side
+            const lower = q.toLowerCase();
+            const clientResults = posts.filter(p =>
+                p.postTitle?.toLowerCase().includes(lower) ||
+                p.postContent?.toLowerCase().includes(lower) ||
+                p.authorName?.toLowerCase().includes(lower) ||
+                p.postCategory?.toLowerCase().includes(lower)
+            );
+            console.log("Client-side fallback results:", clientResults.length);
+            setSearchResults(clientResults);
         } finally {
             setIsSearching(false);
         }
@@ -92,15 +115,9 @@ const Home = () => {
 
     const handleLike = async (postId) => {
         try {
-            await axios.post(
-                `${API_URL}/posts/${postId}/like`,
-                {},
-                {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem("token")}`
-                    }
-                }
-            );
+            await axios.post(`${API_URL}/posts/${postId}/like`, {}, {
+                headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+            });
             await fetchPosts();
         } catch (error) {
             console.error("Error liking post:", error);
@@ -114,123 +131,143 @@ const Home = () => {
     };
 
     const clearSearch = () => {
+        setSearchInput('');
         setSearchQuery('');
         setSearchResults([]);
     };
+
+    const userName = currentUser?.name ||
+        `${currentUser?.firstName || ''} ${currentUser?.lastName || ''}`.trim() || 'Guest';
+
+    const isShowingSearch = searchQuery.length > 0;
 
     if (loading) {
         return (
             <div className="loading-container">
                 <div className="loading-spinner"></div>
-                <p>Loading amazing stories...</p>
+                <p>Loading stories...</p>
             </div>
         );
     }
 
     return (
         <>
+            {/* ── HEADER BOX ── */}
             <nav className="premium-navbar">
                 <div className="nav-container">
-                    <div className="nav-left">
-                        <button className="menu-btn" onClick={() => setShowOffcanvas(true)}>
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                <path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                            </svg>
-                        </button>
-                        <div className="logo" onClick={() => navigate('/home')}>
-                            <span className="logo-icon">🚨</span>
-                            <span className="logo-text">NaijaPulse</span>
-                        </div>
+                    <button className="menu-btn" onClick={() => setShowOffcanvas(true)}>
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                            <path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                        </svg>
+                    </button>
+
+                    <div className="logo" onClick={() => navigate('/home')}>
+                        <span className="logo-icon">₦</span>
+                        <span className="logo-text">NaijaPulse Forum</span>
                     </div>
 
-                    <div className="nav-right">
-                        <button className="compose-btn" onClick={() => navigate('/createpost')}>
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                                <path d="M12 5V19M5 12H19" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                            </svg>
-                            <span>Compose</span>
-                        </button>
-                        <div className="user-avatar" onClick={() => setShowOffcanvas(true)}>
-                            <img 
-                                src={`https://ui-avatars.com/api/?name=${currentUser?.name || currentUser?.firstName || 'User'}&background=000000&color=fff&size=40&bold=true`} 
-                                alt="avatar" 
-                            />
-                        </div>
+                    <div className="nav-stats-line">
+                        <span>Welcome,&nbsp;</span>
+                        <span className="nav-username" onClick={() => navigate('/profile')}>{userName}</span>
+                        <span className="nav-sep"> • </span>
+                        <button className="nav-link" onClick={() => navigate('/profile')}>Edit Profile</button>
+                        <span className="nav-sep"> • </span>
+                        <button className="nav-link" onClick={() => navigate('/home')}>Home</button>
+                        {currentUser?.role === 'admin' && (
+                            <>
+                                <span className="nav-sep"> • </span>
+                                <button className="nav-link" onClick={() => navigate('/Administrator/Dashboard')}>Admin</button>
+                            </>
+                        )}
+                        <span className="nav-sep"> • </span>
+                        <button className="compose-btn" onClick={() => navigate('/createpost')}>+ New Post</button>
+                        <span className="nav-sep"> • </span>
+                        <button className="nav-link" onClick={handleLogout}>Logout</button>
                     </div>
+
+                    {/* Search bar */}
+                    <form className="nav-search-row" onSubmit={handleSearch}>
+                        <input
+                            type="text"
+                            placeholder="Search posts..."
+                            value={searchInput}
+                            onChange={(e) => setSearchInput(e.target.value)}
+                        />
+                        <button type="submit" disabled={isSearching}>
+                            {isSearching ? '...' : 'Search'}
+                        </button>
+                    </form>
                 </div>
             </nav>
 
+            {/* ── SIDEBAR ── */}
             <div className={`premium-sidebar ${showOffcanvas ? 'active' : ''}`}>
                 <div className="sidebar-header">
                     <div className="sidebar-logo">
-                        <span className="logo-icon">🚨</span>
-                        <span className="logo-text">NaijaPulse</span>
+                        <span style={{ fontSize: 18 }}>₦</span>
+                        <span style={{ color: '#7ec87e', fontSize: 15, fontWeight: 'bold', marginLeft: 5 }}>NaijaPulse</span>
                     </div>
                     <button className="close-btn" onClick={() => setShowOffcanvas(false)}>✕</button>
                 </div>
-                
                 <div className="sidebar-user">
-                    <img 
-                        src={`https://ui-avatars.com/api/?name=${currentUser?.name || currentUser?.firstName || 'User'}&background=000000&color=fff&size=80&bold=true`} 
-                        alt="profile" 
+                    <img
+                        src={`https://ui-avatars.com/api/?name=${userName}&background=000000&color=fff&size=80&bold=true`}
+                        alt="profile"
                     />
-                    <h4>{currentUser?.name || `${currentUser?.firstName} ${currentUser?.lastName}` || 'Guest User'}</h4>
+                    <h4>{userName}</h4>
                     <p>{currentUser?.email || 'Not signed in'}</p>
                 </div>
-
                 <div className="sidebar-menu">
-                    <button onClick={() => { navigate('/home'); setShowOffcanvas(false); }}>
-                        <span>🏠</span> Home
-                    </button>
-                    <button onClick={() => { navigate('/profile'); setShowOffcanvas(false); }}>
-                        <span>👤</span> Profile
-                    </button>
-                    {currentUser?.role === "admin" && (
+                    <button onClick={() => { navigate('/home'); setShowOffcanvas(false); }}><span>🏠</span> Home</button>
+                    <button onClick={() => { navigate('/profile'); setShowOffcanvas(false); }}><span>👤</span> Profile</button>
+                    {currentUser?.role === 'admin' && (
                         <button onClick={() => { navigate('/Administrator/Dashboard'); setShowOffcanvas(false); }}>
-                            <span>👨‍💼</span> Admin's Dashboard
+                            <span>👨‍💼</span> Admin Dashboard
                         </button>
                     )}
-                    <button onClick={handleLogout} className="logout-btn">
-                        <span>🚪</span> Logout
-                    </button>
+                    <button onClick={handleLogout} className="logout-btn"><span>🚪</span> Logout</button>
                 </div>
             </div>
-
             {showOffcanvas && <div className="sidebar-overlay" onClick={() => setShowOffcanvas(false)}></div>}
 
+            {/* ── MAIN ── */}
             <main className="main-content">
                 <div className="content-container">
-                    {searchQuery && searchResults.length > 0 ? (
+
+                    {/* ── SEARCH RESULTS VIEW ── */}
+                    {isShowingSearch ? (
                         <>
                             <div className="search-header">
-                                <h2>Search Results for "{searchQuery}"</h2>
-                                <button onClick={clearSearch}>Clear Search</button>
+                                <span>
+                                    {isSearching
+                                        ? 'Searching...'
+                                        : `${searchResults.length} result${searchResults.length !== 1 ? 's' : ''} for "${searchQuery}"`}
+                                </span>
+                                <button onClick={clearSearch}>✕ Clear</button>
                             </div>
-                            <div className="posts-feed">
-                                {searchResults.map(post => (
-                                    <PostCard 
-                                        key={post._id} 
-                                        post={post} 
-                                        handleLike={handleLike} 
-                                        currentUser={currentUser}
-                                        onPostUpdate={fetchPosts}
-                                        API_URL={API_URL}
-                                    />
-                                ))}
-                            </div>
+
+                            {searchResults.length > 0 ? (
+                                <div className="posts-feed">
+                                    {searchResults.map(post => (
+                                        <PostCard key={post._id} post={post} handleLike={handleLike}
+                                            currentUser={currentUser} onPostUpdate={fetchPosts} API_URL={API_URL} />
+                                    ))}
+                                </div>
+                            ) : !isSearching ? (
+                                <div className="empty-search">
+                                    <span>🔍</span>
+                                    <h3>No results found</h3>
+                                    <p>Try a different search term</p>
+                                    <button onClick={clearSearch}>Back to Home</button>
+                                </div>
+                            ) : null}
                         </>
-                    ) : searchQuery ? (
-                        <div className="empty-search">
-                            <span>🔍</span>
-                            <h3>No results found</h3>
-                            <p>Try searching for something else</p>
-                            <button onClick={clearSearch}>Clear Search</button>
-                        </div>
                     ) : (
+                        /* ── NORMAL FEED VIEW ── */
                         <>
                             <div className="categories-section">
                                 <div className="categories-header">
-                                    <h2>Trending</h2>
+                                    <h2>NaijaPulse Topics</h2>
                                 </div>
                                 <div className="categories-list">
                                     {categories.map(cat => (
@@ -249,14 +286,8 @@ const Home = () => {
                             {filteredPosts.length > 0 ? (
                                 <div className="posts-feed">
                                     {filteredPosts.map(post => (
-                                        <PostCard 
-                                            key={post._id} 
-                                            post={post} 
-                                            handleLike={handleLike} 
-                                            currentUser={currentUser}
-                                            onPostUpdate={fetchPosts}
-                                            API_URL={API_URL}
-                                        />
+                                        <PostCard key={post._id} post={post} handleLike={handleLike}
+                                            currentUser={currentUser} onPostUpdate={fetchPosts} API_URL={API_URL} />
                                     ))}
                                 </div>
                             ) : (
@@ -276,16 +307,14 @@ const Home = () => {
 };
 
 const PostCard = ({ post, handleLike, currentUser, onPostUpdate, API_URL }) => {
+    const navigate = useNavigate();
     const [showComments, setShowComments] = useState(false);
     const [commentText, setCommentText] = useState('');
     const [localComments, setLocalComments] = useState(post.comments || []);
-    const [expanded, setExpanded] = useState(false);
     const [likingCommentId, setLikingCommentId] = useState(null);
     const [deletingCommentId, setDeletingCommentId] = useState(null);
 
-    useEffect(() => { 
-        setLocalComments(post.comments || []); 
-    }, [post.comments]);
+    useEffect(() => { setLocalComments(post.comments || []); }, [post.comments]);
 
     const handleAddComment = async () => {
         if (!commentText.trim()) return;
@@ -295,208 +324,95 @@ const PostCard = ({ post, handleLike, currentUser, onPostUpdate, API_URL }) => {
                 { comment: commentText },
                 { headers: { "Authorization": `Bearer ${localStorage.getItem("token")}` } }
             );
-            if (response.data.success) {
-                await onPostUpdate();
-                setCommentText('');
-            }
-        } catch (error) { 
-            console.error("Error adding comment:", error);
-        }
+            if (response.data.success) { await onPostUpdate(); setCommentText(''); }
+        } catch (error) { console.error("Error adding comment:", error); }
     };
 
     const handleLikeComment = async (commentId) => {
         setLikingCommentId(commentId);
         try {
-            await axios.post(
-                `${API_URL}/posts/${post._id}/comment/${commentId}/like`,
-                {},
-                {
-                    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
-                }
-            );
+            await axios.post(`${API_URL}/posts/${post._id}/comment/${commentId}/like`, {}, {
+                headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+            });
             await onPostUpdate();
-        } catch (error) {
-            console.error("Error liking comment:", error);
-        } finally {
-            setLikingCommentId(null);
-        }
+        } catch (error) { console.error("Error liking comment:", error); }
+        finally { setLikingCommentId(null); }
     };
 
     const handleDeleteComment = async (commentId) => {
-        if (!window.confirm('Are you sure you want to delete this comment?')) return;
-        
+        if (!window.confirm('Delete this comment?')) return;
         setDeletingCommentId(commentId);
         try {
-            await axios.delete(
-                `${API_URL}/posts/${post._id}/comment/${commentId}`,
-                { headers: { "Authorization": `Bearer ${localStorage.getItem("token")}` } }
-            );
+            await axios.delete(`${API_URL}/posts/${post._id}/comment/${commentId}`, {
+                headers: { "Authorization": `Bearer ${localStorage.getItem("token")}` }
+            });
             await onPostUpdate();
-        } catch (error) {
-            console.error("Error deleting comment:", error);
-        } finally {
-            setDeletingCommentId(null);
-        }
-    };
-
-    const isLiked = post.likes?.some(id => id?.toString() === currentUser?._id?.toString());
-    const trendingScore = (post.likes?.length || 0) + (post.comments?.length || 0);
-
-    const getCategoryIcon = (category) => {
-        const icons = {
-            technology: '💻',
-            politics: '🏛️',
-            sport: '⚽',
-            security: '🛡️',
-            education: '📖',
-            health: '❤️'
-        };
-        return icons[category] || '📄';
+        } catch (error) { console.error("Error deleting comment:", error); }
+        finally { setDeletingCommentId(null); }
     };
 
     const canDeleteComment = (comment) => {
-        const currentUserId = currentUser?._id?.toString();
-        const commentUserId = comment.userId?._id?.toString() || comment.userId?.toString();
-        const postAuthorId = post.authorId?.toString();
-        
-        return (
-            (currentUserId && currentUserId === commentUserId) ||
-            (currentUserId && currentUserId === postAuthorId) ||
-            currentUser?.role === "admin"
-        );
+        const cu = currentUser?._id?.toString();
+        const co = comment.userId?._id?.toString() || comment.userId?.toString();
+        return (cu && cu === co) || (cu && cu === post.authorId?.toString()) || currentUser?.role === 'admin';
     };
 
-    const isCommentLiked = (comment) => {
-        return comment.likes?.some(id => id?.toString() === currentUser?._id?.toString());
-    };
+    const isCommentLiked = (comment) =>
+        comment.likes?.some(id => id?.toString() === currentUser?._id?.toString());
 
     return (
         <article className="post-card-modern">
-            {post.postImage && (
-                <div className="post-image">
-                    <img src={post.postImage} alt={post.postTitle} />
-                </div>
-            )}
             <div className="post-content">
-                <div className="post-meta">
-                    <div className="author-info">
-                        <img 
-                            src={`https://ui-avatars.com/api/?name=${post.authorName}&background=000000&color=fff&size=32&bold=true`} 
-                            alt={post.authorName} 
-                        />
-                        <div>
-                            <span className="author-name">{post.authorName}</span>
-                            <span className="post-date">{new Date(post.createdAt).toLocaleDateString()}</span>
-                        </div>
-                    </div>
-                    <span className="category-badge">
-                        {getCategoryIcon(post.postCategory)} {post.postCategory}
-                    </span>
-                    {trendingScore > 10 && (
-                        <span className="trending-badge">🔥 Trending</span>
-                    )}
-                </div>
-
-                <h3 className="post-title">{post.postTitle}</h3>
-                
-                <p className="post-excerpt">
-                    {expanded ? post.postContent : post.postContent?.slice(0, 180)}
-                    {post.postContent?.length > 180 && (
-                        <button className="read-more" onClick={() => setExpanded(!expanded)}>
-                            {expanded ? 'Show less' : '...Read more'}
-                        </button>
-                    )}
-                </p>
-
-                <div className="post-stats">
-                    <button 
-                        className={`stat-btn like-btn ${isLiked ? 'active' : ''}`} 
-                        onClick={() => handleLike(post._id)}
-                    >
-                        <svg 
-                            width="18" 
-                            height="18" 
-                            viewBox="0 0 24 24" 
-                            fill={isLiked ? "currentColor" : "none"} 
-                            stroke="currentColor"
-                        >
-                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                        </svg>
-                        <span>{post.likes?.length || 0}</span>
-                    </button>
-                    <button 
-                        className="stat-btn comment-btn" 
-                        onClick={() => setShowComments(!showComments)}
-                    >
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" strokeWidth="2"/>
-                        </svg>
-                        <span>{localComments.length}</span>
-                    </button>
-                </div>
+                <h3
+                    className="post-title clickable-title"
+                    onClick={() => navigate(`/post/${post._id}`)}
+                >
+                    » {post.postTitle}
+                </h3>
 
                 {showComments && (
                     <div className="comments-section">
                         <div className="add-comment">
-                            <input 
-                                type="text" 
-                                placeholder="Write a comment..." 
-                                value={commentText} 
-                                onChange={(e) => setCommentText(e.target.value)} 
+                            <input
+                                type="text"
+                                placeholder="Write a comment..."
+                                value={commentText}
+                                onChange={(e) => setCommentText(e.target.value)}
                                 onKeyPress={(e) => e.key === 'Enter' && handleAddComment()}
                             />
                             <button onClick={handleAddComment}>Post</button>
                         </div>
-                        
                         {localComments.length === 0 ? (
-                            <div className="no-comments">
-                                <p>No comments yet. Be the first to comment!</p>
-                            </div>
+                            <div className="no-comments"><p>No comments yet.</p></div>
                         ) : (
                             localComments.map((comment) => {
                                 const commentId = comment._id;
                                 const commentUser = comment.userId || {};
-                                const userName = commentUser.name || comment.userName || 'User';
-                                const userAvatar = commentUser.name || userName;
-                                
+                                const uName = commentUser.name || comment.userName || 'User';
                                 return (
                                     <div key={commentId} className="comment">
-                                        <img 
-                                            src={`https://ui-avatars.com/api/?name=${userAvatar}&background=000000&color=fff&size=32&bold=true`} 
-                                            alt={userName} 
-                                        />
+                                        <img src={`https://ui-avatars.com/api/?name=${uName}&background=000000&color=fff&size=32&bold=true`} alt={uName} />
                                         <div className="comment-content">
                                             <div className="comment-header">
-                                                <strong>{userName}</strong>
-                                                <span className="comment-date">
-                                                    {new Date(comment.createdAt).toLocaleDateString()}
-                                                </span>
+                                                <strong>{uName}</strong>
+                                                <span className="comment-date">{new Date(comment.createdAt).toLocaleDateString()}</span>
                                             </div>
                                             <p>{comment.comment}</p>
                                             <div className="comment-actions">
-                                                <button 
+                                                <button
                                                     className={`comment-like-btn ${isCommentLiked(comment) ? 'active' : ''}`}
                                                     onClick={() => handleLikeComment(commentId)}
                                                     disabled={likingCommentId === commentId}
                                                 >
-                                                    {likingCommentId === commentId ? (
-                                                        <span className="small-spinner"></span>
-                                                    ) : (
-                                                        <>❤️ {comment.likes?.length || 0}</>
-                                                    )}
+                                                    {likingCommentId === commentId ? <span className="small-spinner"></span> : <>❤️ {comment.likes?.length || 0}</>}
                                                 </button>
-                                                
                                                 {canDeleteComment(comment) && (
-                                                    <button 
+                                                    <button
                                                         className="comment-delete-btn"
                                                         onClick={() => handleDeleteComment(commentId)}
                                                         disabled={deletingCommentId === commentId}
                                                     >
-                                                        {deletingCommentId === commentId ? (
-                                                            <span className="small-spinner"></span>
-                                                        ) : (
-                                                            '🗑️ Delete'
-                                                        )}
+                                                        {deletingCommentId === commentId ? <span className="small-spinner"></span> : '🗑️ Delete'}
                                                     </button>
                                                 )}
                                             </div>

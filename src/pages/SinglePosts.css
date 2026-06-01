@@ -1,0 +1,348 @@
+/* ============================================================
+   SinglePost.css — Nairaland style, matching Home.css palette
+   ============================================================ */
+@import url('https://fonts.googleapis.com/css2?family=Verdana&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: Verdana, Arial, sans-serif;
+  font-size: 13px;
+  background: #dfe3da;
+  color: #1a1a1a;
+  line-height: 1.5;
+}
+
+/* ── NAVBAR (identical to Home) ── */
+.sp-navbar {
+  background: #f0f0e8;
+  border: 1px solid #b8b8a8;
+  border-radius: 6px;
+  max-width: 780px;
+  margin: 10px auto 6px;
+}
+.sp-nav-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 14px;
+  gap: 5px;
+}
+.sp-menu-btn {
+  display: none;
+  background: none; border: none; cursor: pointer;
+  color: #336699; align-self: flex-start; padding: 2px;
+}
+.sp-logo {
+  display: flex; align-items: center; gap: 5px;
+  cursor: pointer; font-size: 22px; font-weight: bold; color: #2d6a2d;
+}
+.sp-logo-text { font-size: 22px; }
+.sp-nav-links {
+  font-size: 12px; color: #333; text-align: center;
+  display: flex; flex-wrap: wrap; align-items: center;
+  justify-content: center; gap: 0;
+}
+.sp-nav-username {
+  color: #cc6600; cursor: pointer; font-weight: bold; font-size: 12px;
+}
+.sp-nav-username:hover { text-decoration: underline; }
+.sp-sep { color: #888; font-size: 12px; }
+.sp-nav-link {
+  font-size: 12px; color: #1a3e6e; background: none;
+  border: none; cursor: pointer; font-family: inherit; padding: 0 1px; display: inline;
+}
+.sp-nav-link:hover { text-decoration: underline; }
+.sp-compose-btn {
+  font-size: 12px; font-weight: bold; color: #cc0000;
+  background: none; border: none; cursor: pointer;
+  font-family: inherit; padding: 0 1px; display: inline;
+}
+.sp-compose-btn:hover { text-decoration: underline; }
+.sp-search-row {
+  display: flex; align-items: center; gap: 4px; margin-top: 2px;
+}
+.sp-search-row input {
+  width: 240px; padding: 4px 7px; border: 1px solid #aaa;
+  font-family: inherit; font-size: 12px; background: #fff; outline: none;
+}
+.sp-search-row input:focus { border-color: #336699; }
+.sp-search-row button {
+  padding: 4px 12px; background: #e8e8e0; border: 1px solid #aaa;
+  font-family: inherit; font-size: 12px; cursor: pointer;
+}
+.sp-search-row button:hover { background: #d4d4cc; }
+
+/* ── SIDEBAR ── */
+.sp-sidebar {
+  position: fixed; top: 0; left: -270px; width: 250px; height: 100vh;
+  background: #1a2a3a; z-index: 2000; transition: left 0.22s ease;
+  display: flex; flex-direction: column; overflow-y: auto;
+  border-right: 2px solid #336699;
+}
+.sp-sidebar.active { left: 0; }
+.sp-sidebar-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 14px; border-bottom: 1px solid rgba(51,102,153,0.4);
+}
+.sp-close-btn {
+  background: none; border: none; color: #ccc;
+  font-size: 16px; cursor: pointer;
+}
+.sp-close-btn:hover { color: #fff; }
+.sp-sidebar-user {
+  padding: 18px 14px; text-align: center;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.sp-sidebar-user img {
+  width: 56px; height: 56px; border-radius: 50%;
+  border: 2px solid #336699; margin-bottom: 8px;
+}
+.sp-sidebar-user h4 { color: #fff; font-size: 13px; margin-bottom: 3px; }
+.sp-sidebar-user p  { color: #aaa; font-size: 11px; }
+.sp-sidebar-menu { padding: 10px 0; display: flex; flex-direction: column; }
+.sp-sidebar-menu button {
+  background: none; border: none; color: #ccc;
+  padding: 9px 16px; text-align: left; font-size: 13px;
+  font-family: inherit; cursor: pointer;
+  display: flex; align-items: center; gap: 9px;
+}
+.sp-sidebar-menu button:hover { background: rgba(51,102,153,0.2); color: #fff; }
+.sp-logout-btn { color: #e07070 !important; }
+.sp-logout-btn:hover { color: #ff8888 !important; }
+.sp-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1999;
+}
+
+/* ── PAGE LAYOUT ── */
+.sp-page { background: #dfe3da; min-height: 100vh; }
+.sp-content {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 0 0 40px;
+}
+
+/* Breadcrumb */
+.sp-breadcrumb {
+  font-size: 11px; color: #555;
+  padding: 5px 2px 4px;
+  display: flex; align-items: center; gap: 4px;
+}
+.sp-back-link {
+  background: none; border: none; color: #1a3e6e;
+  font-size: 11px; cursor: pointer; font-family: inherit; padding: 0;
+}
+.sp-back-link:hover { text-decoration: underline; }
+
+/* ── ORIGINAL POST BOX ── */
+.sp-thread-box {
+  background: #f0f0e8;
+  border: 1px solid #b8b8a8;
+  border-radius: 4px;
+  margin-bottom: 6px;
+  overflow: hidden;
+}
+
+/* Header bar — "Title by Author: time" */
+.sp-thread-header {
+  background: #c8d8b8;   /* greenish like Nairaland's original post header */
+  border-bottom: 1px solid #a8b898;
+  padding: 6px 12px;
+  font-size: 12px;
+  line-height: 1.5;
+}
+.sp-thread-title {
+  color: #1a3e6e;
+  font-weight: bold;
+}
+.sp-thread-author {
+  color: #336600;
+  font-weight: bold;
+}
+.sp-thread-time {
+  color: #555;
+}
+
+/* Post body */
+.sp-thread-body {
+  padding: 12px 14px;
+  background: #f8f8f0;
+}
+.sp-post-img {
+  max-width: 100%; border-radius: 4px;
+  margin-bottom: 10px; display: block;
+}
+.sp-post-text {
+  font-size: 13px; line-height: 1.7;
+  color: #1a1a1a; white-space: pre-wrap;
+}
+
+/* Post actions */
+.sp-thread-actions {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 14px;
+  background: #f0f0e8;
+  border-top: 1px solid #d8d8c8;
+  flex-wrap: wrap;
+}
+.sp-action-btn {
+  background: #e8e8e0; border: 1px solid #b8b8a8;
+  padding: 3px 10px; font-size: 12px; font-family: inherit;
+  cursor: pointer; border-radius: 2px; color: #1a1a1a;
+}
+.sp-action-btn:hover { background: #d8d8d0; }
+.sp-action-btn.liked { color: #cc0000; background: #fff0f0; border-color: #e0a0a0; }
+.sp-action-stat { font-size: 12px; color: #555; }
+
+/* ── COMMENTS SECTION ── */
+.sp-comments-section {
+  display: flex; flex-direction: column; gap: 6px;
+  margin-bottom: 6px;
+}
+.sp-no-comments {
+  background: #f0f0e8; border: 1px solid #b8b8a8;
+  border-radius: 4px; padding: 20px; text-align: center;
+  font-size: 12px; color: #666;
+}
+
+/* Each comment box — Nairaland style */
+.sp-comment-box {
+  background: #f0f0e8;
+  border: 1px solid #b8b8a8;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+/* "Re: Title by Author: time  #1" header */
+.sp-comment-header {
+  background: #e0e8d8;
+  border-bottom: 1px solid #c0c8b0;
+  padding: 5px 12px;
+  font-size: 11px;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px;
+  line-height: 1.5;
+}
+.sp-re-title { color: #1a3e6e; font-weight: bold; }
+.sp-comment-author { color: #cc6600; font-weight: bold; }
+.sp-comment-time { color: #555; }
+.sp-comment-num { color: #999; font-size: 11px; }
+
+/* Comment body */
+.sp-comment-body {
+  padding: 10px 14px;
+  background: #f8f8f0;
+}
+
+/* Quote block inside comment */
+.sp-quote-block {
+  background: #e8f0e0;
+  border-left: 3px solid #a0b890;
+  border-radius: 2px;
+  padding: 8px 10px;
+  margin-bottom: 8px;
+  font-size: 12px;
+}
+.sp-quote-author {
+  color: #336600; font-weight: bold; margin-bottom: 4px; font-size: 11px;
+}
+.sp-quote-text {
+  color: #444; font-style: italic; line-height: 1.5;
+}
+
+.sp-comment-text {
+  font-size: 13px; line-height: 1.7;
+  color: #1a1a1a; white-space: pre-wrap;
+  margin: 0;
+}
+
+/* Action pills — Quote / 12 Likes / Like / Delete */
+.sp-comment-actions {
+  display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+  padding: 6px 14px 8px;
+  background: #f0f0e8;
+  border-top: 1px solid #d8d8c8;
+}
+.sp-btn-pill {
+  background: #e8e8e0; border: 1px solid #c0c0b0;
+  padding: 2px 10px; font-size: 11px; font-family: inherit;
+  cursor: pointer; border-radius: 2px; color: #1a1a1a;
+}
+.sp-btn-pill:hover { background: #d8d8d0; }
+.sp-btn-pill.sp-liked { color: #cc0000; background: #fff0f0; border-color: #e0a0a0; }
+.sp-btn-pill.sp-delete:hover { background: #fee; color: #cc0000; border-color: #e0a0a0; }
+.sp-likes-count { font-size: 11px; color: #555; font-weight: bold; }
+
+/* ── REPLY BOX ── */
+.sp-reply-section {
+  background: #f0f0e8;
+  border: 1px solid #b8b8a8;
+  border-radius: 4px;
+  overflow: hidden;
+}
+.sp-reply-header {
+  background: #e8e8dc;
+  border-bottom: 1px solid #b8b8a8;
+  padding: 5px 12px;
+  font-size: 12px; font-weight: bold; color: #1a1a1a;
+  text-transform: uppercase; letter-spacing: 0.4px;
+}
+.sp-quoting-banner {
+  background: #ffffcc; border-bottom: 1px solid #e0e0a0;
+  padding: 6px 12px; font-size: 12px; color: #555;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.sp-quoting-banner button {
+  background: none; border: none; color: #cc0000;
+  font-size: 12px; cursor: pointer; font-family: inherit;
+}
+.sp-quoting-banner button:hover { text-decoration: underline; }
+.sp-textarea {
+  width: 100%; padding: 10px 12px;
+  border: none; border-bottom: 1px solid #d0d0c0;
+  font-family: inherit; font-size: 13px;
+  resize: vertical; background: #fff; color: #1a1a1a;
+  outline: none; min-height: 100px; display: block;
+}
+.sp-textarea:focus { background: #fffffe; }
+.sp-reply-footer {
+  padding: 8px 12px; background: #f0f0e8;
+}
+.sp-post-btn {
+  background: #336699; color: #fff; border: none;
+  padding: 5px 18px; font-family: inherit; font-size: 12px;
+  font-weight: bold; cursor: pointer; border-radius: 2px;
+}
+.sp-post-btn:hover:not(:disabled) { background: #1a4a7a; }
+.sp-post-btn:disabled { background: #aaa; cursor: default; }
+
+/* ── LOADING ── */
+.sp-loading {
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  height: 60vh; gap: 12px; font-size: 13px; color: #555;
+}
+.sp-spinner {
+  width: 28px; height: 28px;
+  border: 3px solid #ddd; border-top-color: #336699;
+  border-radius: 50%; animation: sp-spin 0.7s linear infinite;
+}
+@keyframes sp-spin { to { transform: rotate(360deg); } }
+
+/* ── MOBILE ── */
+@media (max-width: 640px) {
+  .sp-menu-btn { display: flex; }
+  .sp-navbar { margin: 6px 4px; }
+  .sp-content { padding: 0 4px 30px; }
+  .sp-nav-links { font-size: 11px; }
+  .sp-search-row input { width: 160px; }
+  .sp-thread-header { font-size: 11px; }
+  .sp-comment-header { font-size: 10px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
