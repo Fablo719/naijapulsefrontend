@@ -1,371 +1,390 @@
-/* ============================================================
-   NaijaPulse — Create Post CSS (VISIBLE TEXT FIX)
-   Aesthetic: Black & White Editorial / Ink Press
-   ============================================================ */
+@import url('https://fonts.googleapis.com/css2?family=Verdana&display=swap');
 
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
-
-:root {
-  --ink:   #0a0a0a;
-  --paper: #f5f0e8;
-  --white: #ffffff;
-  --mid:   #888888;
-  --light: #e4ddd3;
-}
-
-*,
-*::before,
-*::after {
+*, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
-/* ── Page ── */
+body {
+  font-family: Verdana, Arial, sans-serif;
+  font-size: 13px;
+  background: #dfe3da;
+  color: #1a1a1a;
+  line-height: 1.5;
+}
+
 .create-post-page {
   min-height: 100vh;
-  background-color: var(--paper);
-  font-family: 'Space Mono', monospace;
-  position: relative;
-  overflow-x: hidden;
+  background: #dfe3da;
+  padding: 20px 0;
 }
 
-/* Grain overlay */
-.create-post-page::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
-  pointer-events: none;
-  z-index: 9999;
-  opacity: 0.03;
-  mix-blend-mode: multiply;
-}
-
-/* ── Container ── */
 .post-container {
-  max-width: 680px;
+  max-width: 780px;
   margin: 0 auto;
-  padding: 2rem 1.5rem 4rem;
-  position: relative;
-  z-index: 1;
+  padding: 0 15px;
 }
 
-/* ── Post Header ── */
+
 .post-header {
+  background: #f0f0e8;
+  border: 1px solid #b8b8a8;
+  border-radius: 6px 6px 0 0;
+  padding: 12px 15px;
   display: flex;
   align-items: center;
-  gap: 1.2rem;
-  padding: 1.4rem 0 1.8rem;
-  border-bottom: 2px solid var(--ink);
-  margin-bottom: 2rem;
-  position: relative;
-}
-
-.post-header::after {
-  content: '';
-  position: absolute;
-  bottom: -6px;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  background: repeating-linear-gradient(
-    90deg,
-    var(--ink) 0, var(--ink) 5px,
-    transparent 5px, transparent 12px
-  );
+  gap: 15px;
+  margin-bottom: -1px;
 }
 
 .post-header button {
-  font-family: 'Space Mono', monospace;
-  font-size: 0.9rem;
-  background: var(--ink);
-  color: var(--white);
-  border: none;
-  width: 2.2rem;
-  height: 2.2rem;
+  background: #e8e8dc;
+  border: 1px solid #b8b8a8;
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  font-size: 18px;
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
-  flex-shrink: 0;
-  transition: background 0.25s ease, transform 0.25s ease;
+  transition: all 0.1s ease;
+  font-weight: bold;
+  color: #1a3e6e;
 }
 
 .post-header button:hover {
-  background: var(--mid);
-  transform: translateX(-2px);
+  background: #d4d4cc;
+  border-color: #999;
 }
 
 .post-header h3 {
-  font-family: 'Playfair Display', serif;
-  font-weight: 700;
-  font-style: italic;
-  font-size: 1.4rem;
-  letter-spacing: -0.02em;
-  color: var(--ink);
+  color: #2d6a2d;
+  font-size: 16px;
+  font-weight: bold;
+  margin: 0;
+  letter-spacing: -0.2px;
 }
 
-/* ── Post Card ── */
+
 .post-card {
-  background: var(--white);
-  border-left: 4px solid var(--ink);
-  padding: 2.2rem 2rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1.2rem;
-  position: relative;
-  transition: box-shadow 0.4s ease;
+  background: #f0f0e8;
+  border: 1px solid #b8b8a8;
+  border-top: none;
+  border-radius: 0 0 6px 6px;
+  padding: 20px;
 }
 
-.post-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: var(--ink);
-}
 
-.post-card:focus-within {
-  box-shadow: 6px 6px 0 var(--ink);
-}
-
-/* ── Category Grid ── */
 .category-grid {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
-  padding-bottom: 1.2rem;
-  border-bottom: 1px solid var(--light);
+  gap: 8px;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #d8d8c8;
 }
 
 .category-grid button {
-  font-family: 'Space Mono', monospace;
-  font-size: 0.58rem;
-  text-transform: uppercase;
-  letter-spacing: 0.18em;
-  background: var(--paper);
-  color: var(--mid);
-  border: 1.5px solid #ccc;
-  padding: 0.45rem 0.9rem;
+  background: #e8e8dc;
+  border: 1px solid #b8b8a8;
+  padding: 6px 12px;
+  font-family: Verdana, Arial, sans-serif;
+  font-size: 11px;
+  font-weight: bold;
   cursor: pointer;
-  transition: all 0.25s ease;
-  white-space: nowrap;
+  transition: all 0.1s ease;
+  border-radius: 4px;
+  color: #1a3e6e;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
 }
 
 .category-grid button:hover {
-  border-color: var(--ink);
-  color: var(--ink);
+  background: #d4d4cc;
+  border-color: #999;
 }
 
 .category-grid button.active {
-  background: var(--ink);
-  color: var(--white);
-  border-color: var(--ink);
+  background: #336699;
+  border-color: #2a5a8a;
+  color: #fff;
 }
 
-/* ── Title Input (FIXED - Now Visible!) ── */
-.post-card input[type="text"] {
-  font-family: 'Playfair Display', serif;
-  font-weight: 700;
-  font-size: 1.15rem;
-  color: #000000 !important;  /* Force black text */
-  background: #ffffff !important;  /* White background */
-  border: 1.5px solid #ccc;
-  border-radius: 4px;
-  padding: 0.8rem 1rem;
-  width: 100%;
-  outline: none;
-  letter-spacing: -0.01em;
-  transition: border-color 0.25s ease;
-  opacity: 1 !important;
-  -webkit-text-fill-color: #000000 !important;
-}
 
-.post-card input[type="text"]::placeholder {
-  font-family: 'Space Mono', monospace;
-  font-size: 0.7rem;
-  font-weight: 400;
-  text-transform: uppercase;
-  letter-spacing: 0.18em;
-  color: #999999 !important;
-  opacity: 1 !important;
-}
-
-.post-card input[type="text"]:focus {
-  border-color: var(--ink);
-  background: #ffffff !important;
-  color: #000000 !important;
-}
-
-/* Ensure input text is always visible when typing */
-.post-card input[type="text"]:active,
-.post-card input[type="text"]:focus-visible {
-  color: #000000 !important;
-  background: #ffffff !important;
-}
-
-/* ── Textarea (FIXED) ── */
+.post-card input[type="text"],
 .post-card textarea {
-  font-family: 'Space Mono', monospace;
-  font-size: 0.72rem;
-  line-height: 2;
-  color: #0a0a0a !important;  /* Force dark text */
-  background: #f5f0e8 !important;  /* Light paper background */
-  border: 1.5px solid #ccc;
-  border-radius: 4px;
-  padding: 1rem;
   width: 100%;
-  min-height: 220px;
-  resize: vertical;
+  padding: 10px 12px;
+  border: 1px solid #b8b8a8;
+  background: #fff;
+  font-family: Verdana, Arial, sans-serif;
+  font-size: 12px;
+  margin-bottom: 15px;
   outline: none;
-  letter-spacing: 0.03em;
-  transition: border-color 0.25s ease, background 0.25s ease;
+  transition: all 0.1s ease;
 }
 
-.post-card textarea::placeholder {
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-  font-size: 0.62rem;
-  color: #999999 !important;
-  opacity: 1 !important;
-}
-
+.post-card input[type="text"]:focus,
 .post-card textarea:focus {
-  border-color: var(--ink);
-  background: #ffffff !important;
-  color: #0a0a0a !important;
+  border-color: #336699;
+  box-shadow: 0 0 0 2px rgba(51,102,153,0.15);
 }
 
-/* ── Image Upload ── */
-.post-card > button:not([disabled]) {
-  font-family: 'Space Mono', monospace;
-  font-size: 0.62rem;
-  text-transform: uppercase;
-  letter-spacing: 0.2em;
-  background: transparent;
-  color: var(--mid);
-  border: 1.5px dashed #aaa;
-  padding: 1rem;
+.post-card input[type="text"]::placeholder,
+.post-card textarea::placeholder {
+  color: #999;
+}
+
+.post-card textarea {
+  min-height: 200px;
+  resize: vertical;
+  line-height: 1.5;
+}
+
+
+.post-card input[type="file"] {
+  display: none;
+}
+
+.post-card button:not(.category-grid button) {
+  background: #336699;
+  border: 1px solid #2a5a8a;
+  color: #fff;
+  padding: 10px 20px;
+  font-family: Verdana, Arial, sans-serif;
+  font-size: 12px;
+  font-weight: bold;
   cursor: pointer;
-  width: 100%;
-  transition: all 0.3s ease;
-  position: relative;
-}
-
-.post-card > button:not([disabled]):hover {
-  border-color: var(--ink);
-  color: var(--ink);
-  background: var(--paper);
-}
-
-/* ── Image Preview ── */
-.image-preview-container {
-  position: relative;
-  background: #f5f0e8;
-  padding: 1rem;
   border-radius: 4px;
-}
-
-.post-card > div img {
-  display: block;
+  transition: all 0.1s ease;
+  margin-bottom: 15px;
   width: 100%;
-  max-height: 340px;
-  object-fit: cover;
-  border: 2px solid var(--ink);
-  filter: grayscale(100%) contrast(1.05);
-  transition: filter 0.4s ease;
 }
 
-.post-card > div img:hover {
-  filter: grayscale(0%) contrast(1);
+.post-card button:not(.category-grid button):hover:not(:disabled) {
+  background: #1a4a7a;
+  border-color: #1a4a7a;
 }
 
-.post-card > div button {
-  font-family: 'Space Mono', monospace;
-  font-size: 0.58rem;
-  text-transform: uppercase;
-  letter-spacing: 0.18em;
-  background: var(--ink);
-  color: var(--white);
-  border: none;
-  padding: 0.5rem 1rem;
-  cursor: pointer;
-  margin-top: 0.5rem;
-  transition: opacity 0.2s ease;
-}
-
-.post-card > div button:hover {
-  opacity: 0.7;
-}
-
-/* ── Publish Button ── */
-.post-card > button[disabled],
-.post-card > button:last-child {
-  font-family: 'Space Mono', monospace;
-  font-size: 0.68rem;
-  text-transform: uppercase;
-  letter-spacing: 0.22em;
-  background: var(--ink);
-  color: var(--white);
-  border: 2px solid var(--ink);
-  padding: 1rem;
-  cursor: pointer;
-  width: 100%;
-  position: relative;
-  overflow: hidden;
-  transition: color 0.3s ease;
-  isolation: isolate;
-  margin-top: 0.4rem;
-}
-
-.post-card > button:last-child::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: var(--paper);
-  transform: translateY(101%);
-  transition: transform 0.35s cubic-bezier(0.76, 0, 0.24, 1);
-  z-index: -1;
-}
-
-.post-card > button:last-child:hover:not(:disabled) {
-  color: var(--ink);
-}
-
-.post-card > button:last-child:hover:not(:disabled)::before {
-  transform: translateY(0);
-}
-
-.post-card > button:disabled {
-  opacity: 0.5;
+.post-card button:not(.category-grid button):disabled {
+  opacity: 0.6;
   cursor: not-allowed;
 }
 
-/* ── Selection ── */
-::selection {
-  background: var(--ink);
-  color: var(--paper);
+
+.post-card div > img {
+  max-width: 100%;
+  height: auto;
+  border: 1px solid #b8b8a8;
+  border-radius: 4px;
+  margin-bottom: 10px;
+  display: block;
 }
 
-/* ── Scrollbar ── */
-::-webkit-scrollbar { width: 5px; }
-::-webkit-scrollbar-track { background: var(--paper); }
-::-webkit-scrollbar-thumb { background: var(--ink); }
+.post-card div > button {
+  background: #cc0000;
+  border-color: #a00000;
+  margin-top: 0;
+}
 
-/* ── Responsive ── */
-@media (max-width: 600px) {
+.post-card div > button:hover {
+  background: #a00000;
+}
+
+
+.post-card div > button.remove-image {
+  background: #cc0000;
+  border-color: #a00000;
+}
+
+
+.post-card button.loading {
+  position: relative;
+  opacity: 0.7;
+}
+
+
+@media (max-width: 640px) {
+  .create-post-page {
+    padding: 10px 0;
+  }
+  
   .post-container {
-    padding: 1.2rem 1rem 3rem;
+    padding: 0 10px;
   }
-
-  .post-card {
-    padding: 1.6rem 1.3rem;
+  
+  .post-header {
+    padding: 10px 12px;
   }
-
+  
   .post-header h3 {
-    font-size: 1.1rem;
+    font-size: 14px;
   }
+  
+  .post-card {
+    padding: 15px;
+  }
+  
+  .category-grid {
+    gap: 6px;
+  }
+  
+  .category-grid button {
+    padding: 5px 10px;
+    font-size: 10px;
+  }
+  
+  .post-card input[type="text"],
+  .post-card textarea {
+    padding: 8px 10px;
+    font-size: 11px;
+    margin-bottom: 12px;
+  }
+  
+  .post-card textarea {
+    min-height: 150px;
+  }
+  
+  .post-card button:not(.category-grid button) {
+    padding: 8px 16px;
+    font-size: 11px;
+  }
+}
+
+
+@media (max-width: 480px) {
+  .category-grid {
+    justify-content: center;
+  }
+  
+  .category-grid button {
+    flex: 1;
+    min-width: calc(33.33% - 6px);
+    justify-content: center;
+  }
+}
+
+
+.Toastify__toast {
+  font-family: Verdana, Arial, sans-serif;
+  font-size: 12px;
+  border-radius: 4px;
+}
+
+.Toastify__toast--success {
+  background: #2d6a2d;
+}
+
+.Toastify__toast--error {
+  background: #cc0000;
+}
+
+.Toastify__toast-body {
+  font-family: Verdana, Arial, sans-serif;
+  font-size: 12px;
+}
+
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.post-card {
+  animation: fadeInUp 0.3s ease-out;
+}
+
+
+.post-card input[type="text"]:hover,
+.post-card textarea:hover {
+  border-color: #999;
+}
+
+
+.post-card input[type="text"]:focus-visible,
+.post-card textarea:focus-visible,
+.category-grid button:focus-visible,
+.post-card button:focus-visible {
+  outline: 2px solid #336699;
+  outline-offset: 2px;
+}
+
+
+.post-card button:disabled {
+  background: #999;
+  border-color: #888;
+  cursor: not-allowed;
+  transform: none;
+}
+
+
+.image-preview-container {
+  position: relative;
+  margin-bottom: 15px;
+}
+
+.image-preview-container img {
+  width: 100%;
+  border-radius: 4px;
+}
+
+.image-preview-container .remove-image-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(204, 0, 0, 0.9);
+  border: none;
+  width: auto;
+  padding: 5px 10px;
+  font-size: 11px;
+  margin: 0;
+}
+
+
+.char-counter {
+  text-align: right;
+  font-size: 10px;
+  color: #888;
+  margin-top: -12px;
+  margin-bottom: 15px;
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .post-card {
+    animation: none;
+  }
+}
+
+/* Custom scrollbar for textarea */
+.post-card textarea::-webkit-scrollbar {
+  width: 8px;
+}
+
+.post-card textarea::-webkit-scrollbar-track {
+  background: #e8e8dc;
+  border-radius: 4px;
+}
+
+.post-card textarea::-webkit-scrollbar-thumb {
+  background: #b8b8a8;
+  border-radius: 4px;
+}
+
+.post-card textarea::-webkit-scrollbar-thumb:hover {
+  background: #999;
 }

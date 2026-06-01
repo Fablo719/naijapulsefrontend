@@ -8,7 +8,7 @@ import SinglePost from "./pages/SinglePosts";
 import LandingPage from "./pages/LandingPage";
 import AdminPosts from "./pages/AdminPosts";
 import AdminUsers from "./pages/AdminUsers";
-import ResetPassword from "./pages/ResetPassword"; // ✅ UNCOMMENT THIS LINE
+import ResetPassword from "./pages/ResetPassword"; 
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
